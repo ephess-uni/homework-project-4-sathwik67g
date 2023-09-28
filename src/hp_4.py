@@ -39,7 +39,7 @@ def add_date_range(values, start_date):
 def fees_report(infile, outfile):
     """Calculates late fees per patron id and writes a summary report to
     outfile."""
-    late_fees_with open(infile) as f:
+    with open(infile) as f:
         l=[]
         DictReader_obj = DictReader(f)
         for item in DictReader_obj:

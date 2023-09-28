@@ -39,7 +39,32 @@ def add_date_range(values, start_date):
 def fees_report(infile, outfile):
     """Calculates late fees per patron id and writes a summary report to
     outfile."""
-    late_fees_by_patron = {}
+    late_fees_with open(infile) as f:
+        l=[]
+        DictReader_obj = DictReader(f)
+        for item in DictReader_obj:
+            sample_dict={}
+            day1=datetime.strptime(item['date_returned'],'%m/%d/%Y')- datetime.strptime(item['date_due'],'%m/%d/%Y') 
+            if(day1.days>0):
+                sample_dict["patron_id"]=item['patron_id']
+                sample_dict["late_fees"]=round(day1.days*0.25, 2)
+                l.append(sample_dict)
+            else:
+                sample_dict["patron_id"]=item['patron_id']
+                sample_dict["late_fees"]=float(0)
+                l.append(sample_dict)
+        aggregated_data = {}
+
+        for dict in l:
+            aggregated_data[dict['patron_id']] = aggregated_data.get(dict['patron_id'], 0) + dict['late_fees']
+
+        t = [{'patron_id': key, 'late_fees': value f'{value:.2f}'} for key, value in aggregated_data.items()]
+
+    with open(outfile,"w", newline="") as file:
+        col = ['patron_id', 'late_fees']
+        writer = DictWriter(file, fieldnames=col)
+        writer.writeheader()
+        writer.writerows(t)by_patron = {}
 
     with open(infile) as f:
         reader = DictReader(f)

@@ -50,7 +50,7 @@ def fees_report(infile, outfile):
                 dict["late_fees"]=round(day.days*0.25, 2)
                 lis.append(dict)
             else:
-                sample_dict["late_fees"]=float(0)
+                dict["late_fees"]=float(0)
                 lis.append(dict)
         agg = {}
         for dict in lis:

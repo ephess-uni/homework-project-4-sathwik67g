@@ -46,7 +46,7 @@ def fees_report(infile, outfile):
             dict={}
             day=datetime.strptime(item['date_returned'],'%m/%d/%Y')- datetime.strptime(item['date_due'],'%m/%d/%Y') 
             dict["patron_id"]=item['patron_id']
-            if(day1.days>0):
+            if(day.days>0):
                 dict["late_fees"]=round(day.days*0.25, 2)
                 lis.append(dict)
             else:

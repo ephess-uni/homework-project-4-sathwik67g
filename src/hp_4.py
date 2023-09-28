@@ -58,7 +58,7 @@ def fees_report(infile, outfile):
         for dict in l:
             aggregated_data[dict['patron_id']] = aggregated_data.get(dict['patron_id'], 0) + dict['late_fees']
 
-        t = [{'patron_id': key, 'late_fees': value f'{value:.2f}'} for key, value in aggregated_data.items()]
+        t = [{'patron_id': key, 'late_fees': '{:.2f}'.format(value)}} for key, value in aggregated_data.items()]
 
     with open(outfile,"w", newline="") as file:
         col = ['patron_id', 'late_fees']
@@ -66,26 +66,7 @@ def fees_report(infile, outfile):
         writer.writeheader()
         writer.writerows(t)by_patron = {}
 
-    with open(infile) as f:
-        reader = DictReader(f)
-        for item in reader:
-            patron_id = item['patron_id']
-            date_returned = datetime.strptime(item['date_returned'], '%m/%d/%Y')
-            date_due = datetime.strptime(item['date_due'], '%m/%d/%Y')
-
-            days_late = date_returned - date_due
-            if days_late.days > 0:
-                late_fees = days_late.days * 0.25
-                late_fees_by_patron[patron_id] = late_fees
-
-    with open(outfile, 'w', newline='') as f:
-        writer = DictWriter(f, fieldnames=('patron_id', 'late_fees'))
-        writer.writeheader()
-
-        for patron_id, late_fees in late_fees_by_patron.items():
-            late_fees_formatted = f'{late_fees:.2f}'
-            writer.writerow({'patron_id': patron_id, 'late_fees': late_fees_formatted})
-
+ 
 
 # The following main selection block will only run when you choose
 # "Run -> Module" in IDLE.  Use this section to run test code.  The

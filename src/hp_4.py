@@ -42,7 +42,7 @@ def fees_report(infile, outfile):
     late_fees_by_patron = {}
 
     with open(infile) as f:
-        reader = csv.DictReader(f)
+        reader = DictReader(f)
         for item in reader:
             patron_id = item['patron_id']
             date_returned = datetime.strptime(item['date_returned'], '%m/%d/%Y')
@@ -54,7 +54,7 @@ def fees_report(infile, outfile):
                 late_fees_by_patron[patron_id] = late_fees
 
     with open(outfile, 'w', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=('patron_id', 'late_fees'))
+        writer = DictWriter(f, fieldnames=('patron_id', 'late_fees'))
         writer.writeheader()
 
         for patron_id, late_fees in late_fees_by_patron.items():

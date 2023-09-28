@@ -40,31 +40,27 @@ def fees_report(infile, outfile):
     """Calculates late fees per patron id and writes a summary report to
     outfile."""
     with open(infile) as f:
-        l=[]
+        lis=[]
         DictReader_obj = DictReader(f)
         for item in DictReader_obj:
-            sample_dict={}
-            day1=datetime.strptime(item['date_returned'],'%m/%d/%Y')- datetime.strptime(item['date_due'],'%m/%d/%Y') 
+            dict={}
+            day=datetime.strptime(item['date_returned'],'%m/%d/%Y')- datetime.strptime(item['date_due'],'%m/%d/%Y') 
+            dict["patron_id"]=item['patron_id']
             if(day1.days>0):
-                sample_dict["patron_id"]=item['patron_id']
-                sample_dict["late_fees"]=round(day1.days*0.25, 2)
-                l.append(sample_dict)
+                dict["late_fees"]=round(day.days*0.25, 2)
+                lis.append(dict)
             else:
-                sample_dict["patron_id"]=item['patron_id']
                 sample_dict["late_fees"]=float(0)
-                l.append(sample_dict)
-        aggregated_data = {}
-
-        for dict in l:
-            aggregated_data[dict['patron_id']] = aggregated_data.get(dict['patron_id'], 0) + dict['late_fees']
-
-        t = [{'patron_id': key, 'late_fees': '{:.2f}'.format(value)} for key, value in aggregated_data.items()]
+                lis.append(dict)
+        agg = {}
+        for dict in lis:
+            agg[dict['patron_id']] = agg.get(dict['patron_id'], 0) + dict['late_fees']
+        final_list = [{'patron_id': key, 'late_fees': '{:.2f}'.format(value)} for key, value in agg.items()]
 
     with open(outfile,"w", newline="") as file:
-        col = ['patron_id', 'late_fees']
-        writer = DictWriter(file, fieldnames=col)
+        writer = DictWriter(file, fieldnames=['patron_id', 'late_fees'])
         writer.writeheader()
-        writer.writerows(t)
+        writer.writerows(final_list)
  
 
 # The following main selection block will only run when you choose

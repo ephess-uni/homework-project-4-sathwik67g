@@ -19,7 +19,7 @@ def date_range(start, n):
         raise TypeError
     date_range_list = []
     for val in range(0,n):
-        date_range_list.append(datetime.strptime(start, "%Y-%m-%d") + timedelta(days=i))
+        date_range_list.append(datetime.strptime(start, "%Y-%m-%d") + timedelta(days=val))
     return date_range_list
 
 
@@ -27,7 +27,13 @@ def add_date_range(values, start_date):
     """Adds a daily date range to the list `values` beginning with
     `start_date`.  The date, value pairs are returned as tuples
     in the returned list."""
-    pass
+    final_list = []
+    for temp, value in enumerate(values):
+        final_list.append(tuple( [
+            datetime.strptime(start_date, "%Y-%m-%d") + timedelta(days=temp),
+            value
+        ]))
+    return final_list
 
 
 def fees_report(infile, outfile):
